@@ -1,5 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
+type taxonomy = {
+    taxonomyCodeId: number;
+    code: string;
+    taxonomyType: string;
+    classification: string | null;
+    isDeleted: boolean;
+    isPrimary: boolean;
+}
+
+type queryP = {
+    title: string;
+    relatedTerms: string;
+}
+
 export async function GET(request: NextRequest) {
     const primaries =
         request.nextUrl.searchParams.get("primaries") || undefined;
@@ -83,11 +97,11 @@ export async function GET(request: NextRequest) {
     ];
     let returnList = [...taxonomyList]
     if (primaries) {
-        const primaryString = primaryResult.map((x:any) => x.title)
+        const primaryString = primaryResult.map((x:queryP) => x.title)
         returnList = returnList.filter((x) => !primaryString.includes(x.taxonomyType));
     }
     if (secondaries) {
-        const secondaryString = secondaryResult.map((x:any) => x.title)
+        const secondaryString = secondaryResult.map((x:queryP) => x.title)
         returnList = returnList.filter((x) => !secondaryString.includes(x.taxonomyType));
     }
     return NextResponse.json(returnList);
