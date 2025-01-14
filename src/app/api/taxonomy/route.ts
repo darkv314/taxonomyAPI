@@ -5,8 +5,8 @@ export async function GET(request: NextRequest) {
         request.nextUrl.searchParams.get("primaries") || undefined;
     const secondaries =
         request.nextUrl.searchParams.get("secondaries") || undefined;
-    console.log("primaries", primaries);
-    console.log("secondaries", secondaries);
+    const primaryResult = primaries ? JSON.parse(primaries) : '';
+    const secondaryResult = secondaries ? JSON.parse(secondaries) : '';
     const taxonomyList = [
         {
             taxonomyCodeId: 1,
@@ -83,10 +83,12 @@ export async function GET(request: NextRequest) {
     ];
     let returnList = [...taxonomyList]
     if (primaries) {
-        returnList = returnList.filter((x) => x.taxonomyType !== primaries);
+        const primaryString = primaryResult.map((x:any) => x.title)
+        returnList = returnList.filter((x) => !primaryString.includes(x.taxonomyType));
     }
     if (secondaries) {
-        returnList = returnList.filter((x) => x.taxonomyType !== secondaries);
+        const secondaryString = secondaryResult.map((x:any) => x.title)
+        returnList = returnList.filter((x) => !secondaryString.includes(x.taxonomyType));
     }
     return NextResponse.json(returnList);
 }
