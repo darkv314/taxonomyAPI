@@ -98,11 +98,11 @@ export async function GET(request: NextRequest) {
     let returnList = [...taxonomyList]
     if (primaries) {
         const primaryString = primaryResult.map((x:queryP) => x.title)
-        returnList = returnList.filter((x) => !primaryString.includes(x.taxonomyType));
+        returnList = returnList.filter((x: taxonomy) => !primaryString.includes(x.taxonomyType));
     }
     if (secondaries) {
         const secondaryString = secondaryResult.map((x:queryP) => x.title)
-        returnList = returnList.filter((x) => !secondaryString.includes(x.taxonomyType));
+        returnList = returnList.filter((x: taxonomy) => !secondaryString.includes(x.taxonomyType));
     }
     return NextResponse.json(returnList);
 }
